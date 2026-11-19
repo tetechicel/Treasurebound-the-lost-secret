@@ -1,0 +1,8 @@
+{
+  "name": "TREASUREBOUND: The Lost Secret",
+  "description": "Multiplayer pixel-art educational treasure hunting adventure game powered by Phaser 3 and Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

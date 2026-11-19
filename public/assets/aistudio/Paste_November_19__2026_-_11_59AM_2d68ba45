@@ -1,0 +1,1393 @@
+# PRODUCT REQUIREMENTS DOCUMENT (PRD)
+# TREASUREBOUND: THE LOST SECRET
+### Multiplayer Educational Treasure Hunting Adventure Game
+
+**Version:** 1.0  
+**Platform:** Web (Desktop & Mobile)  
+**Deployment:** Vercel  
+**Backend:** Supabase  
+**Game Engine:** Phaser 3  
+**Frontend:** React + TypeScript + Vite  
+**Database:** PostgreSQL (Supabase)  
+**Multiplayer:** Supabase Realtime  
+**Target Players:** High School Students (SMA)  
+**Maximum Players:** 4 players per room
+
+---
+
+# 1. PROJECT OVERVIEW
+
+## 1.1 Product Description
+
+TREASUREBOUND: The Lost Secret adalah multiplayer educational adventure game berbasis web dengan gaya visual pixel art isometric/top-down 3/4.
+
+Game ini menggabungkan beberapa genre:
+- Adventure
+- Treasure Hunting
+- Exploration
+- Educational Quiz
+- Multiplayer PvP Combat
+
+Pemain berperan sebagai seorang penjelajah yang memasuki pulau misterius untuk menemukan Secret Treasure.
+
+Setiap pemain harus menjelajahi pulau, mencari peti harta karun, mengumpulkan petunjuk, menjawab pertanyaan akademik, mengumpulkan item, serta menghadapi pemain lain.
+
+Pemain pertama yang berhasil menemukan dan mengambil Secret Treasure menjadi pemenang.
+
+Game harus dapat dimainkan secara multiplayer menggunakan sistem Room Code tanpa membutuhkan dedicated game server berbayar.
+
+## 1.2 Product Vision
+
+Menciptakan game edukasi yang tidak terasa seperti aplikasi ujian atau kuis biasa.
+
+Pemain belajar melalui eksplorasi, pemecahan masalah, kompetisi, dan interaksi selama permainan.
+
+Educational content harus menjadi bagian dari gameplay, bukan sekadar fitur tambahan.
+
+## 1.3 Target Platform
+
+1. Desktop/Laptop melalui browser.
+2. Smartphone melalui browser mobile.
+
+Game harus responsive dengan kontrol dan layout berbeda berdasarkan perangkat.
+
+Browser target:
+- Google Chrome
+- Microsoft Edge
+- Safari
+- Mobile Chrome
+- Mobile Safari
+
+---
+
+# 2. CORE GAMEPLAY CONCEPT
+
+## 2.1 Game Story
+
+Sebuah pulau misterius menyimpan legenda tentang Secret Treasure yang konon memiliki kekuatan luar biasa.
+
+Para penjelajah dari berbagai tempat datang untuk membuktikan kemampuan mereka.
+
+Namun, pulau tersebut dipenuhi reruntuhan kuno, teka-teki, jebakan, dan berbagai tantangan pengetahuan.
+
+Hanya penjelajah yang paling cerdas, cepat, dan mampu bertahan yang bisa menemukan harta karun tersebut.
+
+## 2.2 Main Gameplay Loop
+
+1. Pemain membuka game.
+2. Pemain memasukkan nama karakter.
+3. Pemain membuat room atau bergabung menggunakan Room Code.
+4. Pemain menunggu pemain lain di lobby.
+5. Host memulai permainan.
+6. Seluruh pemain masuk ke game world yang sama.
+7. Pemain menjelajahi pulau.
+8. Pemain menemukan peti, apel, dan tantangan edukasi.
+9. Pemain menjawab pertanyaan untuk memperoleh petunjuk.
+10. Pemain dapat menyerang dan menghindari pemain lain.
+11. Pemain menemukan Secret Treasure.
+12. Pemain pertama yang mengambil Secret Treasure memenangkan pertandingan.
+13. Game menampilkan hasil pertandingan.
+14. Pemain dapat bermain kembali dengan map dan konfigurasi random baru.
+
+---
+
+# 3. GAME WORLD DESIGN
+
+## 3.1 Visual Direction
+
+Gunakan pixel art 2D dengan perspektif isometric/top-down 3/4.
+
+Referensi visual utama adalah gambar referensi pixel-art adventure yang diberikan oleh user.
+
+Karakteristik visual:
+- Colorful pixel art.
+- Detailed environment.
+- Fantasy adventure atmosphere.
+- Isometric/3/4 top-down perspective.
+- Pixelated textures.
+- Natural environmental lighting.
+- Consistent pixel resolution.
+- Detailed environmental objects.
+
+Jangan menggunakan:
+- Flat vector illustration.
+- Modern minimalist UI sebagai visual utama.
+- 3D realistic graphics.
+- Emoji sebagai pengganti asset game.
+- Bentuk karakter yang hanya berupa lingkaran atau kotak.
+- Placeholder geometris sebagai hasil akhir.
+
+Gunakan sprite sheet dan tilemap jika memungkinkan.
+
+Seluruh asset harus memiliki gaya visual konsisten.
+
+Jika asset khusus belum tersedia, gunakan asset pixel art yang legal untuk digunakan atau buat asset sederhana yang konsisten. Jangan mengklaim asset placeholder sebagai final artwork.
+
+## 3.2 Map Structure
+
+Pulau terdiri dari empat wilayah utama.
+
+### A. Village
+
+Fungsi:
+- Starting area.
+- Tempat pemain muncul ketika pertandingan dimulai.
+- Area eksplorasi awal.
+
+Objek:
+- Rumah kayu.
+- Jalan batu.
+- Sumur.
+- Toko kecil.
+- NPC.
+- Dekorasi lingkungan.
+
+### B. Forest
+
+Fungsi:
+- Area eksplorasi.
+- Lokasi peti biasa.
+- Lokasi Apple.
+- Area pertempuran.
+
+Objek:
+- Pohon.
+- Semak.
+- Batu.
+- Sungai.
+- Jembatan.
+- Peti.
+- Apel.
+
+### C. Ancient Ruins
+
+Fungsi:
+- Area educational challenges.
+- Lokasi puzzle.
+- Lokasi peti khusus.
+- Tempat pemain memperoleh petunjuk.
+
+Objek:
+- Bangunan kuno.
+- Pilar batu.
+- Gerbang terkunci.
+- Ancient Chest.
+- Puzzle mechanism.
+
+### D. Hidden Temple
+
+Fungsi:
+- Area paling berbahaya.
+- Lokasi potensial Secret Treasure.
+- Final exploration area.
+
+Objek:
+- Kuil kuno.
+- Patung.
+- Trap.
+- Secret Chamber.
+- Final Treasure.
+
+## 3.3 Map Generation
+
+Map harus menggunakan sistem randomization berbasis seed.
+
+Ketentuan:
+- Setiap pertandingan memiliki seed berbeda.
+- Seluruh pemain dalam satu room menggunakan seed yang sama.
+- Lokasi peti diacak.
+- Lokasi Apple diacak.
+- Lokasi pertanyaan diacak.
+- Lokasi Secret Treasure diacak.
+- Posisi objek harus tetap valid dan tidak menumpuk secara tidak wajar.
+- Spawn point pemain harus aman.
+- Treasure tidak boleh muncul di lokasi yang tidak dapat dijangkau.
+
+Gunakan deterministic map generation.
+
+Seed dibuat ketika host memulai pertandingan dan disimpan pada match state.
+
+Semua pemain harus menghasilkan map identik menggunakan seed tersebut.
+
+Jangan melakukan randomization secara independen pada setiap browser.
+
+---
+
+# 4. CHARACTER SYSTEM
+
+## 4.1 Character Creation
+
+Sebelum memasuki lobby, pemain harus memasukkan nama karakter.
+
+Ketentuan:
+- Nama minimal 3 karakter.
+- Nama maksimal 16 karakter.
+- Nama tidak boleh kosong.
+- Nama pemain harus unik dalam satu room.
+
+Sediakan minimal 4 pilihan karakter pixel art dengan tampilan berbeda.
+
+Setiap karakter memiliki:
+- Idle animation.
+- Walking animation.
+- Attack animation.
+- Damage animation.
+- Death/respawn animation.
+
+## 4.2 Character Movement
+
+Desktop:
+
+W = Move Up  
+A = Move Left  
+S = Move Down  
+D = Move Right
+
+Movement harus:
+- Menggunakan continuous movement.
+- Memiliki kecepatan konsisten.
+- Mendukung diagonal movement tanpa kecepatan tambahan.
+- Memiliki collision dengan objek lingkungan.
+- Tidak memungkinkan pemain menembus dinding atau bangunan.
+- Memiliki animasi berjalan dan idle.
+
+Mobile:
+
+Gunakan virtual joystick di bagian kiri bawah.
+
+Pemain dapat menggerakkan karakter menggunakan joystick.
+
+## 4.3 Camera System
+
+Kamera harus mengikuti karakter utama.
+
+Ketentuan:
+- Smooth camera follow.
+- Tidak terlalu jauh dari karakter.
+- Tidak memperlihatkan area di luar map.
+- Memiliki batas kamera sesuai ukuran world.
+- Mendukung pergerakan ke seluruh area pulau.
+
+---
+
+# 5. MULTIPLAYER SYSTEM
+
+## 5.1 Technology
+
+Gunakan Supabase Realtime sebagai sistem komunikasi multiplayer.
+
+Gunakan:
+- Supabase Database untuk persistent data.
+- Supabase Realtime Broadcast untuk sinkronisasi posisi dan aksi pemain.
+- Supabase Realtime Presence untuk status online pemain.
+- Supabase RPC atau Edge Functions untuk validasi aksi penting.
+
+Tidak boleh menggunakan layanan dedicated game server berbayar.
+
+Tidak boleh menggunakan backend server berbayar yang membutuhkan pembayaran wajib.
+
+## 5.2 Room System
+
+Terdapat dua pilihan:
+
+CREATE ROOM
+
+Ketika pemain memilih Create Room:
+1. Sistem membuat room baru.
+2. Menghasilkan Room Code unik sepanjang 6 karakter.
+3. Pemain menjadi Host.
+4. Pemain masuk ke Waiting Lobby.
+
+JOIN ROOM
+
+Ketika pemain memilih Join Room:
+1. Pemain memasukkan Room Code.
+2. Sistem memvalidasi kode.
+3. Jika room ditemukan dan masih menunggu, pemain dapat bergabung.
+4. Jika kode tidak ditemukan, tampilkan error.
+5. Jika room penuh, tampilkan error.
+6. Jika game sudah dimulai, pemain tidak boleh bergabung.
+
+Ketentuan:
+- Maksimal 4 pemain per room.
+- Minimal 2 pemain untuk memulai multiplayer match.
+- Host dapat memulai pertandingan.
+- Pemain lain dapat melihat daftar peserta.
+- Host dapat melihat jumlah pemain.
+- Room memiliki status WAITING, PLAYING, FINISHED.
+- Room memiliki expiration/cleanup mechanism.
+
+## 5.3 Lobby Interface
+
+Tampilkan:
+- Room Code.
+- Tombol Copy Room Code.
+- Daftar pemain.
+- Character avatar.
+- Nama pemain.
+- Status connected/disconnected.
+- Host indicator.
+- Tombol Start Game.
+- Tombol Leave Room.
+
+Host hanya dapat memulai pertandingan jika terdapat minimal 2 pemain.
+
+## 5.4 Host Disconnection
+
+Jika host terputus sebelum pertandingan dimulai:
+- Sistem memilih host baru dari pemain yang masih terhubung.
+
+Jika host terputus saat pertandingan:
+- Pertandingan tetap berjalan.
+- Pemain lain tidak otomatis kehilangan permainan.
+
+Jika semua pemain terputus:
+- Room dapat ditandai expired dan dibersihkan.
+
+## 5.5 Real-Time Synchronization
+
+Data yang harus disinkronkan:
+- Player position.
+- Player direction.
+- Player movement state.
+- Player attack state.
+- Player health.
+- Player inventory.
+- Collected items.
+- Opened chests.
+- Quiz progress.
+- Treasure state.
+- Match status.
+- Winner.
+
+Optimalkan frekuensi Broadcast.
+
+Jangan mengirim update posisi setiap frame.
+
+Gunakan throttling/interpolation untuk membuat pergerakan multiplayer tetap halus.
+
+Gunakan Presence untuk mendeteksi koneksi pemain.
+
+Pemain harus melihat karakter pemain lain bergerak secara real-time.
+
+PENTING:
+
+Seluruh pemain harus benar-benar berada dalam satu game world yang sama.
+
+Jangan membuat simulasi multiplayer palsu menggunakan karakter bot lokal.
+
+---
+
+# 6. COMBAT SYSTEM
+
+## 6.1 Attack Mechanism
+
+Pemain dapat menyerang pemain lain menggunakan Magic Projectile.
+
+Visual:
+- Energy orb.
+- Glowing projectile.
+- Pixel-art attack animation.
+- Hit effect.
+
+Desktop:
+- Tombol E untuk menyerang.
+- Arah serangan mengikuti posisi mouse relatif terhadap karakter.
+
+Mobile:
+- Tombol Attack di bagian kanan bawah.
+- Arah serangan mengikuti arah aim/touch terakhir.
+- Pemain dapat menggeser area kanan untuk mengubah arah serangan.
+
+## 6.2 Attack Specification
+
+Base Health: 100 HP.
+
+Attack Damage: 20 HP.
+
+Attack Cooldown: 1 second.
+
+Projectile:
+- Memiliki kecepatan tertentu.
+- Memiliki jarak maksimum.
+- Menghilang ketika mengenai target atau mencapai batas jarak.
+- Tidak dapat menyerang pemain yang sama berkali-kali dengan satu projectile.
+
+Gunakan collision detection.
+
+Pastikan proyektil tidak memberikan damage berulang akibat satu collision.
+
+## 6.3 Damage System
+
+Ketika pemain terkena serangan:
+- HP berkurang 20.
+- Karakter memainkan damage animation.
+- Health bar diperbarui.
+- Tampilkan hit effect.
+
+Ketika HP mencapai 0:
+- Pemain memasuki death state.
+- Respawn setelah 5 detik.
+- HP dipulihkan menjadi 100.
+- Inventory tetap dipertahankan.
+- Pemain mendapatkan invulnerability selama 2 detik setelah respawn.
+
+Tampilkan countdown respawn.
+
+Pemain tidak boleh menyerang ketika sedang dalam death state.
+
+## 6.4 Anti-Griefing
+
+- Pemain tidak dapat menyerang dirinya sendiri.
+- Pemain tidak dapat menyerang ketika sedang respawn.
+- Pemain tidak dapat menyerang di luar jarak yang valid.
+- Attack cooldown harus divalidasi.
+- Damage harus dihitung menggunakan aturan game yang konsisten.
+- Pemain tidak dapat memanipulasi HP hanya dengan mengubah nilai frontend.
+
+---
+
+# 7. HEALTH AND APPLE SYSTEM
+
+## 7.1 Health Bar
+
+Setiap pemain memiliki health bar.
+
+Maximum Health: 100 HP.
+
+Tampilkan health bar:
+- Di atas karakter.
+- Pada HUD pemain sendiri.
+- Di area inventory jika diperlukan.
+
+Health bar berubah berdasarkan jumlah HP.
+
+## 7.2 Apple Item
+
+Apple adalah item healing yang dapat ditemukan di map.
+
+Apple Healing: +25 HP.
+
+Maximum Apple Inventory: 3.
+
+Ketentuan:
+- Apel memiliki lokasi spawn acak.
+- Jumlah apel terbatas.
+- Apel yang diambil pemain menghilang dari world.
+- Apel tidak dapat diambil dua pemain sekaligus.
+- Apple dapat digunakan melalui inventory.
+- Apple tidak dapat digunakan ketika HP sudah penuh.
+- Apple berkurang satu setelah digunakan.
+
+Apple harus memiliki sprite pixel art.
+
+Tambahkan animasi ketika pemain mengambil dan menggunakan apel.
+
+---
+
+# 8. TREASURE SYSTEM
+
+## 8.1 Treasure Categories
+
+Terdapat tiga jenis treasure.
+
+### Normal Chest
+Berisi:
+- Coins.
+- Petunjuk.
+- Random reward.
+
+### Ancient Chest
+Berisi:
+- Petunjuk Secret Treasure.
+- Coins.
+- Special items.
+
+### Secret Treasure
+Merupakan harta karun utama yang menentukan kemenangan.
+
+## 8.2 Treasure Location
+
+Secret Treasure memiliki lokasi acak pada setiap pertandingan.
+
+Lokasi harus:
+- Berada pada area yang dapat dijangkau.
+- Tidak bertumpuk dengan collision object.
+- Tidak berada di luar map.
+- Tidak muncul di spawn area.
+- Dapat ditemukan melalui petunjuk dan eksplorasi.
+
+## 8.3 Treasure Interaction
+
+Pemain mendekati treasure dan menggunakan tombol interaksi.
+
+Desktop:
+F.
+
+Mobile:
+Tombol Interact.
+
+Ketika Secret Treasure ditemukan:
+1. Sistem memvalidasi pemain yang mengambil.
+2. Status match berubah menjadi FINISHED.
+3. Pemain tersebut menjadi winner.
+4. Seluruh pemain menerima notifikasi.
+5. Game menampilkan Result Screen.
+
+Hanya satu pemain yang boleh memenangkan pertandingan.
+
+Gunakan atomic server-side validation untuk mencegah dua pemain mendapatkan kemenangan bersamaan.
+
+---
+
+# 9. EDUCATIONAL SYSTEM
+
+## 9.1 Target Education
+
+Seluruh pertanyaan ditujukan untuk siswa SMA kelas 10–12.
+
+Pertanyaan harus memiliki:
+- Pertanyaan yang jelas.
+- Empat pilihan jawaban.
+- Satu jawaban benar.
+- Penjelasan jawaban.
+- Subject.
+- Topic.
+- Difficulty level.
+
+## 9.2 Subject Categories
+
+Minimal mencakup:
+
+1. Matematika
+   - Aljabar.
+   - Trigonometri.
+   - Statistika.
+   - Peluang.
+   - Fungsi.
+
+2. Biologi
+   - Genetika.
+   - Ekosistem.
+   - Sistem organ.
+   - Evolusi.
+   - Sel.
+
+3. Fisika
+   - Gerak.
+   - Energi.
+   - Hukum Newton.
+   - Listrik.
+   - Gelombang.
+
+4. Kimia
+   - Ikatan kimia.
+   - Stoikiometri.
+   - Asam dan basa.
+   - Sistem periodik.
+   - Reaksi kimia.
+
+5. Sejarah
+   - Sejarah Indonesia.
+   - Pergerakan nasional.
+   - Kemerdekaan.
+   - Sejarah dunia.
+
+6. Geografi
+   - Iklim.
+   - Peta.
+   - Geologi.
+   - Kependudukan.
+   - Geografi Indonesia.
+
+7. Bahasa Inggris
+   - Grammar.
+   - Vocabulary.
+   - Reading comprehension.
+   - Sentence structure.
+
+8. Ekonomi
+   - Permintaan dan penawaran.
+   - Inflasi.
+   - Pasar.
+   - Kebijakan ekonomi.
+   - Akuntansi dasar.
+
+## 9.3 Quiz Mechanism
+
+Pertanyaan muncul ketika pemain:
+- Membuka Ancient Chest.
+- Mengaktifkan Ancient Ruins.
+- Membuka pintu rahasia.
+- Menemukan puzzle tertentu.
+
+Quiz UI harus menampilkan:
+- Subject.
+- Question.
+- Four answer options.
+- Timer.
+- Difficulty.
+- Submit/answer feedback.
+
+Pemain harus menjawab pertanyaan untuk memperoleh reward atau membuka akses.
+
+## 9.4 Quiz Reward
+
+Jawaban benar:
+- Mendapatkan petunjuk.
+- Mendapatkan coins.
+- Membuka chest.
+- Mengaktifkan mekanisme tertentu.
+
+Jawaban salah:
+- Tidak mendapatkan reward.
+- Bisa mengaktifkan trap.
+- Bisa kehilangan sejumlah HP dalam tantangan tertentu.
+
+Jangan membuat semua jawaban salah selalu mengurangi HP. Variasikan konsekuensinya.
+
+## 9.5 Question Database
+
+Sediakan minimal 100 pertanyaan awal yang berkualitas.
+
+Distribusi yang disarankan:
+- 15 Matematika.
+- 15 Biologi.
+- 15 Fisika.
+- 15 Kimia.
+- 10 Sejarah.
+- 10 Geografi.
+- 10 Bahasa Inggris.
+- 10 Ekonomi.
+
+Setiap pertanyaan harus:
+- Relevan dengan kurikulum SMA.
+- Tidak ambigu.
+- Memiliki jawaban benar yang dapat dipertanggungjawabkan.
+- Memiliki penjelasan.
+- Memiliki tingkat kesulitan.
+
+Pertanyaan disimpan pada database atau question bank terstruktur.
+
+Hindari pertanyaan duplikat dalam satu pertandingan.
+
+Gunakan random question selection.
+
+Answer key tidak boleh diekspos secara sembarangan kepada client sebelum jawaban dikirimkan. Gunakan validasi server-side melalui Edge Function atau mekanisme aman yang sesuai.
+
+---
+
+# 10. RANDOMIZATION SYSTEM
+
+Setiap pertandingan harus memiliki konfigurasi berbeda.
+
+Randomized elements:
+- Treasure locations.
+- Apple spawn locations.
+- Normal chest locations.
+- Ancient chest locations.
+- Quiz locations.
+- Question selection.
+- Puzzle sequence.
+
+Gunakan Match Seed.
+
+Alur:
+
+1. Host memulai permainan.
+2. Backend menghasilkan seed.
+3. Backend menghasilkan match configuration.
+4. Match configuration disimpan.
+5. Semua pemain menerima konfigurasi.
+6. Semua client menghasilkan map yang identik.
+
+Ketika host memilih Play Again:
+- Match lama diselesaikan.
+- Match state baru dibuat.
+- Seed baru dihasilkan.
+- Seluruh lokasi item diacak kembali.
+- Pertanyaan dipilih ulang.
+- Seluruh pemain dikembalikan ke lobby atau langsung ke pertandingan baru sesuai pilihan.
+
+Jangan menggunakan seed lama ketika memulai pertandingan baru.
+
+---
+
+# 11. USER INTERFACE AND USER EXPERIENCE
+
+## 11.1 Main Menu
+
+Tampilan:
+- Logo TREASUREBOUND.
+- Background pixel-art island.
+- Play.
+- How to Play.
+- Settings.
+- Credits.
+
+Gunakan animasi sederhana pada background.
+
+## 11.2 Character Setup
+
+Tampilkan:
+- Character selection.
+- Name input.
+- Preview karakter.
+- Continue button.
+
+## 11.3 Room Lobby
+
+Tampilkan:
+- Room Code.
+- Copy Code.
+- Player List.
+- Character Preview.
+- Host Indicator.
+- Start Game.
+- Leave Room.
+
+## 11.4 In-Game HUD
+
+Tampilkan:
+- Player Name.
+- Health Bar.
+- Apple Counter.
+- Coin Counter.
+- Inventory.
+- Current Objective.
+- Mini Map.
+- Player Status.
+
+Jangan memenuhi layar dengan terlalu banyak elemen.
+
+## 11.5 Quiz Modal
+
+Tampilan harus terintegrasi dengan gaya visual pixel art.
+
+Gunakan panel yang mudah dibaca.
+
+Pastikan modal tidak tertutup oleh elemen HUD.
+
+## 11.6 Victory Screen
+
+Ketika pertandingan selesai, tampilkan:
+
+- WINNER!
+- Nama pemenang.
+- Character Avatar.
+- Match Duration.
+- Correct Answers.
+- Incorrect Answers.
+- Total Coins.
+- Total Chests Opened.
+- Total Attacks.
+- Play Again.
+- Back to Main Menu.
+
+Pemain yang kalah tetap mendapatkan statistik pertandingan.
+
+---
+
+# 12. RESPONSIVE DESIGN
+
+Game harus memiliki dua jenis interface yang berbeda.
+
+## 12.1 Desktop/Laptop
+
+- Game canvas menggunakan sebagian besar layar.
+- WASD untuk movement.
+- E untuk attack.
+- F untuk interaction.
+- Mouse untuk aim.
+- HUD ditempatkan di sekitar game canvas.
+- Inventory menggunakan keyboard atau klik mouse.
+- UI tidak boleh mengganggu area permainan.
+
+## 12.2 Mobile
+
+Gunakan landscape orientation sebagai orientasi gameplay utama.
+
+Mobile controls:
+- Virtual joystick di kiri bawah.
+- Aim area di kanan.
+- Attack button.
+- Interact button.
+- Inventory button.
+- Pause button.
+
+Ketentuan:
+- Touch controls harus responsif.
+- Tombol memiliki ukuran yang nyaman.
+- Tidak ada tombol yang saling bertumpuk.
+- Game canvas menyesuaikan ukuran layar.
+- Gunakan safe-area inset.
+- Mencegah browser melakukan scrolling ketika pemain sedang menggerakkan karakter.
+- Jangan memunculkan keyboard virtual ketika pemain melakukan gameplay.
+
+Pada mobile, tampilkan tombol kontrol yang lebih besar dan HUD yang lebih ringkas.
+
+Jangan sekadar memperkecil desktop interface.
+
+---
+
+# 13. TECHNICAL ARCHITECTURE
+
+## 13.1 Technology Stack
+
+Frontend:
+- React.
+- TypeScript.
+- Vite.
+- Phaser 3.
+- Tailwind CSS.
+- Lucide React untuk UI icons.
+
+Backend:
+- Supabase.
+- PostgreSQL.
+- Supabase Realtime.
+- Supabase Edge Functions atau RPC.
+
+Deployment:
+- Vercel.
+
+## 13.2 Application Structure
+
+Pisahkan React UI dengan Phaser Game Engine.
+
+React bertanggung jawab untuk:
+- Main Menu.
+- Character Setup.
+- Lobby.
+- Settings.
+- Inventory UI.
+- Quiz Modal.
+- Result Screen.
+
+Phaser bertanggung jawab untuk:
+- Game World.
+- Character Rendering.
+- Movement.
+- Collision.
+- Camera.
+- Animation.
+- Projectile.
+- Item Rendering.
+- Environment.
+
+Gunakan satu state management yang konsisten untuk komunikasi antara React dan Phaser.
+
+Jangan membuat game logic tersebar secara tidak terstruktur.
+
+## 13.3 Recommended Folder Structure
+
+src/
+  components/
+    ui/
+    lobby/
+    game/
+    quiz/
+    inventory/
+    results/
+
+  pages/
+    MainMenu.tsx
+    CharacterSetup.tsx
+    Lobby.tsx
+    GamePage.tsx
+    ResultPage.tsx
+
+  game/
+    scenes/
+      BootScene.ts
+      PreloadScene.ts
+      WorldScene.ts
+      UIScene.ts
+
+    entities/
+      Player.ts
+      Projectile.ts
+      Treasure.ts
+      Chest.ts
+      Apple.ts
+      NPC.ts
+
+    systems/
+      MovementSystem.ts
+      CombatSystem.ts
+      CollisionSystem.ts
+      TreasureSystem.ts
+      QuizSystem.ts
+      RandomizationSystem.ts
+
+    maps/
+      MapGenerator.ts
+      MapConfig.ts
+
+  multiplayer/
+    roomService.ts
+    playerService.ts
+    realtimeService.ts
+    matchService.ts
+    presenceService.ts
+
+  services/
+    supabase.ts
+    questionService.ts
+
+  hooks/
+  types/
+  utils/
+  assets/
+
+supabase/
+  migrations/
+  functions/
+
+Pastikan struktur dapat disesuaikan jika terdapat kebutuhan arsitektur yang lebih baik.
+
+---
+
+# 14. DATABASE DESIGN (ERD)
+
+Buat relational database menggunakan PostgreSQL.
+
+Tabel yang dibutuhkan:
+
+## 14.1 players
+
+- id (UUID, PK).
+- username.
+- character_id.
+- created_at.
+
+## 14.2 rooms
+
+- id (UUID, PK).
+- room_code (unique).
+- host_player_id.
+- status (WAITING, PLAYING, FINISHED).
+- max_players.
+- created_at.
+- expires_at.
+
+## 14.3 room_players
+
+- id (UUID, PK).
+- room_id (FK).
+- player_id.
+- is_host.
+- is_connected.
+- joined_at.
+
+## 14.4 matches
+
+- id (UUID, PK).
+- room_id (FK).
+- seed.
+- status.
+- winner_player_id.
+- started_at.
+- finished_at.
+- map_configuration (JSONB).
+
+## 14.5 match_players
+
+- id (UUID, PK).
+- match_id (FK).
+- player_id.
+- health.
+- apples.
+- coins.
+- correct_answers.
+- incorrect_answers.
+- total_attacks.
+- opened_chests.
+- final_position (JSONB).
+
+## 14.6 questions
+
+- id (UUID, PK).
+- subject.
+- topic.
+- difficulty.
+- question_text.
+- options (JSONB).
+- correct_answer.
+- explanation.
+- created_at.
+
+## 14.7 match_events
+
+- id (UUID, PK).
+- match_id (FK).
+- player_id.
+- event_type.
+- event_data (JSONB).
+- created_at.
+
+Gunakan foreign keys, indexes, unique constraints, dan RLS policies yang sesuai.
+
+Pastikan desain database tidak memungkinkan pemain mengakses atau memanipulasi data pemain lain secara sembarangan.
+
+Jangan menyimpan data yang sebenarnya hanya diperlukan sementara ke database secara berlebihan.
+
+Posisi pemain sebaiknya dikirim melalui Realtime Broadcast, bukan disimpan ke database setiap frame.
+
+---
+
+# 15. SECURITY AND FAIR PLAY
+
+Implementasikan:
+
+1. Supabase Row Level Security.
+2. Room membership validation.
+3. Host authorization.
+4. Server-side match validation.
+5. Atomic winner determination.
+6. Attack cooldown validation.
+7. Health validation.
+8. Item collection validation.
+9. Treasure collection validation.
+10. Question answer validation.
+
+Jangan pernah mengekspos Supabase Service Role Key di frontend.
+
+Gunakan environment variables:
+
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+
+Untuk Edge Functions, simpan secret menggunakan environment secrets Supabase.
+
+Jangan mengandalkan localStorage sebagai sumber kebenaran multiplayer.
+
+Client tidak boleh dapat menentukan pemenang secara sepihak.
+
+---
+
+# 16. NETWORK AND PERFORMANCE
+
+Game harus dioptimalkan untuk koneksi internet standar.
+
+Ketentuan:
+- Position updates menggunakan throttling.
+- Gunakan interpolation untuk pergerakan karakter remote.
+- Hindari terlalu banyak database queries.
+- Gunakan Realtime Channels secara efisien.
+- Pastikan channel di-unsubscribe ketika pemain keluar.
+- Tangani reconnect.
+- Tangani disconnected players.
+- Gunakan cleanup untuk room yang sudah expired.
+- Hindari memory leaks pada Phaser scenes.
+- Pastikan mobile tidak mengalami lag berlebihan.
+
+Target:
+- Gameplay terasa responsif.
+- Pergerakan karakter multiplayer terlihat halus.
+- Game dapat dimainkan pada smartphone kelas menengah.
+- Initial loading tidak berlebihan.
+
+Catatan: Supabase Free memiliki kuota dan batas penggunaan. Implementasi harus memperhatikan kuota Realtime, Database, dan Edge Functions. Jangan mengasumsikan layanan gratis memiliki kapasitas tanpa batas.
+
+---
+
+# 17. MATCH FLOW
+
+## WAITING
+
+- Room dibuat.
+- Pemain bergabung.
+- Host menunggu pemain.
+- Host dapat memulai ketika minimal 2 pemain sudah bergabung.
+
+## STARTING
+
+- Match ID dibuat.
+- Seed dibuat.
+- Map configuration dibuat.
+- Spawn points ditentukan.
+- Seluruh pemain menerima konfigurasi.
+- Game dimulai.
+
+## PLAYING
+
+- Pemain menjelajah.
+- Pemain membuka chest.
+- Pemain menjawab quiz.
+- Pemain mengumpulkan item.
+- Pemain menyerang pemain lain.
+- Pemain mencari Secret Treasure.
+
+## FINISHED
+
+- Pemenang ditentukan.
+- Seluruh pemain menerima hasil.
+- Statistik pertandingan disimpan.
+- Tampilkan Result Screen.
+
+## PLAY AGAIN
+
+- Host dapat memulai pertandingan baru.
+- Match baru dibuat.
+- Seed baru dihasilkan.
+- Lokasi item dan treasure diacak.
+- Pertanyaan diacak.
+- Pemain kembali ke gameplay.
+
+---
+
+# 18. ACCEPTANCE CRITERIA
+
+Game baru dianggap selesai jika seluruh kriteria berikut terpenuhi.
+
+### A. Room System
+
+- [ ] Pemain dapat membuat room.
+- [ ] Room Code unik berhasil dibuat.
+- [ ] Pemain lain dapat bergabung menggunakan kode.
+- [ ] Maksimal 4 pemain.
+- [ ] Room penuh menolak pemain tambahan.
+- [ ] Host dapat memulai game.
+- [ ] Pemain dapat melihat peserta lain.
+
+### B. Multiplayer
+
+- [ ] Dua browser berbeda dapat bergabung dalam room yang sama.
+- [ ] Kedua pemain berada di map yang sama.
+- [ ] Posisi pemain tersinkronisasi.
+- [ ] Pemain lain terlihat bergerak secara real-time.
+- [ ] Attack state tersinkronisasi.
+- [ ] Health tersinkronisasi.
+- [ ] Item yang diambil menghilang dari semua client.
+- [ ] Treasure yang diambil mengakhiri pertandingan untuk semua pemain.
+
+### C. Movement
+
+- [ ] WASD berfungsi.
+- [ ] Diagonal movement berfungsi.
+- [ ] Collision berfungsi.
+- [ ] Camera follow berfungsi.
+- [ ] Virtual joystick berfungsi di HP.
+
+### D. Combat
+
+- [ ] E dapat digunakan untuk menyerang.
+- [ ] Mobile attack button berfungsi.
+- [ ] Projectile muncul.
+- [ ] Projectile dapat mengenai pemain.
+- [ ] Damage dihitung dengan benar.
+- [ ] Health bar diperbarui.
+- [ ] Cooldown bekerja.
+- [ ] Respawn bekerja.
+
+### E. Apple
+
+- [ ] Apple muncul pada lokasi acak.
+- [ ] Apple dapat diambil.
+- [ ] Apple menambah inventory.
+- [ ] Inventory maksimum 3.
+- [ ] Apple memulihkan 25 HP.
+- [ ] Apple tidak dapat digunakan ketika HP penuh.
+
+### F. Educational Quiz
+
+- [ ] Quiz dapat dibuka.
+- [ ] Pertanyaan berasal dari bank soal SMA.
+- [ ] Empat opsi jawaban ditampilkan.
+- [ ] Jawaban benar dan salah dapat dibedakan.
+- [ ] Penjelasan ditampilkan.
+- [ ] Reward bekerja.
+- [ ] Pertanyaan tidak berulang dalam satu match.
+
+### G. Treasure
+
+- [ ] Normal Chest dapat ditemukan.
+- [ ] Ancient Chest dapat ditemukan.
+- [ ] Secret Treasure muncul.
+- [ ] Lokasi treasure dapat berubah setiap match.
+- [ ] Treasure dapat diambil.
+- [ ] Pemenang ditentukan secara otomatis.
+- [ ] Tidak ada dua pemenang dalam satu match.
+
+### H. Responsive
+
+- [ ] Desktop UI berfungsi.
+- [ ] Mobile UI berfungsi.
+- [ ] Mobile landscape berfungsi.
+- [ ] Touch controls berfungsi.
+- [ ] HUD tidak bertumpuk.
+- [ ] Tidak terjadi scrolling saat gameplay.
+
+### I. Deployment
+
+- [ ] Game dapat di-deploy di Vercel.
+- [ ] Supabase terkoneksi.
+- [ ] Environment variables terkonfigurasi.
+- [ ] Tidak ada secret key yang terekspos.
+- [ ] Seluruh halaman dapat diakses melalui URL deployment.
+- [ ] Multiplayer tetap berfungsi pada production build.
+
+---
+
+# 19. DEVELOPMENT PRIORITY
+
+Pengembangan harus dilakukan secara bertahap.
+
+## PHASE 1 — FOUNDATION
+
+- Setup React + Vite + TypeScript.
+- Setup Phaser 3.
+- Setup Supabase.
+- Setup folder structure.
+- Setup database migrations.
+- Setup environment variables.
+- Setup main menu.
+- Setup character selection.
+
+## PHASE 2 — CORE GAMEPLAY
+
+- Create game world.
+- Implement pixel-art rendering.
+- Character movement.
+- Collision.
+- Camera.
+- Character animation.
+- Map boundaries.
+
+## PHASE 3 — MULTIPLAYER
+
+- Create room.
+- Join room.
+- Room Code.
+- Lobby.
+- Presence.
+- Realtime player synchronization.
+- Host management.
+- Match state.
+
+## PHASE 4 — GAME MECHANICS
+
+- Combat.
+- Projectile.
+- Health.
+- Respawn.
+- Apple.
+- Inventory.
+- Chest.
+- Treasure.
+
+## PHASE 5 — EDUCATIONAL SYSTEM
+
+- Question database.
+- Quiz UI.
+- Quiz interaction.
+- Answer validation.
+- Reward.
+- Educational statistics.
+
+## PHASE 6 — RANDOMIZATION
+
+- Match seed.
+- Random map configuration.
+- Random item spawning.
+- Random treasure location.
+- Random question selection.
+- Replay system.
+
+## PHASE 7 — POLISHING
+
+- Animations.
+- Sound effects.
+- Pixel-art UI.
+- Mobile controls.
+- Responsive layout.
+- Loading screen.
+- Error handling.
+- Performance optimization.
+
+## PHASE 8 — TESTING AND DEPLOYMENT
+
+- Multiplayer testing.
+- Mobile testing.
+- Security testing.
+- Database testing.
+- Production build.
+- Vercel deployment.
+- Production multiplayer testing.
+
+---
+
+# 20. IMPORTANT DEVELOPMENT INSTRUCTIONS
+
+These instructions are mandatory.
+
+1. Build a fully functional game, not merely a UI prototype.
+
+2. Every visible button must have a working function.
+
+3. Do not create fake multiplayer using local bots.
+
+4. Do not simulate player synchronization locally.
+
+5. Use real Supabase Realtime communication.
+
+6. All players in one room must share the same game state.
+
+7. Do not use paid dedicated game servers.
+
+8. Ensure the project can be deployed using Vercel Hobby and Supabase Free within their applicable usage limits.
+
+9. Do not expose service role keys.
+
+10. Do not use placeholder functionality for core mechanics.
+
+11. Prioritize working gameplay over unnecessary decorative features.
+
+12. Use reusable components and maintainable architecture.
+
+13. Handle loading states, errors, disconnected players, and reconnecting.
+
+14. Test the game with at least two separate browser sessions.
+
+15. Do not declare a feature complete before testing it.
+
+16. Use proper TypeScript types.
+
+17. Ensure that desktop and mobile controls both work.
+
+18. All gameplay mechanics must be integrated, not implemented as disconnected demonstrations.
+
+19. Use original or properly licensed pixel-art assets.
+
+20. Do not silently remove requested features because they are difficult to implement. If a technical limitation occurs, explain it and propose a working alternative.
+
+---
+
+# 21. FINAL PRODUCT EXPECTATION
+
+The final result must feel like a polished multiplayer pixel-art adventure game.
+
+The game should have:
+- A beautiful pixel-art world.
+- Smooth character movement.
+- Responsive controls.
+- Real multiplayer functionality.
+- Competitive treasure hunting.
+- Interactive educational challenges.
+- Working combat mechanics.
+- Health and inventory management.
+- Randomized game sessions.
+- A clear winner determination system.
+- A replay mechanism.
+- A responsive desktop and mobile experience.
+
+The most important product principle:
+
+**MAKE THE PLAYER FEEL LIKE THEY ARE PLAYING AN ADVENTURE GAME, NOT TAKING AN EXAM.**
+
+Educational content must naturally integrate into exploration, progression, and competition.
+
+The final application must be playable from a public Vercel URL without requiring users to install additional software.
+
+END OF PRODUCT REQUIREMENTS DOCUMENT.
